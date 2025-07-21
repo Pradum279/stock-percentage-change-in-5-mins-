@@ -1,0 +1,60 @@
+python code to find difference in stock price in min  by percentage  and show in bar graph 
+ limitations - (yahoo finance only allows 30 days of data for 1,5,10 min and 60 days for 15 min and so on and unlimited for days )
+
+
+-----------------------------------------------------------------------------------------
+
+// step - 1
+
+
+import yfinance as yf
+
+# Example: Apple stock on July 15, 2025
+ticker = yf.Ticker("^NSEI")
+
+# Fetch 1-minute data for the whole day
+data = ticker.history(interval="5m", start="2025-07-21", end="2025-07-22")
+
+# Filter from 1 PM to 2 PM (in US Eastern Time)
+data_filtered = data.between_time("14:30", "15:30")
+
+data_filtered.head()
+
+-----------------------------------------------------------------------------------------
+
+// step - 2
+
+filtered = data_filtered["Open"] - data_filtered["Close"]
+filtered.head(20)
+
+-----------------------------------------------------------------------------------------
+
+// step - 3 
+
+# Assuming data_filtered is your DataFrame
+Percent_Change = ((data_filtered['Close'] - data_filtered['Open']) / data_filtered['Open']) * 100
+
+# Display first 20 rows
+Percent_Change * 100
+
+------------------------------------------------------------------------------------------
+
+// step - 4
+
+import matplotlib.pyplot as plt
+
+
+------------------------------------------------------------------------------------------
+
+// step - 5
+
+plt.figure(figsize=(12, 6))
+plt.bar(Percent_Change.index.astype(str), Percent_Change.values, color='steelblue')
+
+plt.title('Percent Change in Price (Intraday)', fontsize=14)
+plt.xlabel('Datetime', fontsize=12)
+plt.ylabel('Percent Change (%)', fontsize=12)
+plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better readability
+plt.grid(axis='y', linestyle='--', alpha=0.6)
+plt.tight_layout()
+plt.show()
